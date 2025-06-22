@@ -116,7 +116,7 @@ func _on_file_dialog_file_selected(path: String) -> void:
 				temp_file = FileAccess.create_temp(FileAccess.WRITE, "temp_img", ".jpg", true)
 			else:
 				print("Unsupported image type for temporary file")
-				return
+				
 			
 			if temp_file:
 				temp_file.store_buffer(data)
@@ -128,13 +128,10 @@ func _on_file_dialog_file_selected(path: String) -> void:
 				
 				if err != OK:
 					print("Failed to load image from temporary file")
-					return
 			else:
 				print("Failed to create temporary file")
-				return
 		else:
 			print("Failed to open original file for reading")
-			return
 	
 	var texture = ImageTexture.create_from_image(img)
 	texture_rect.texture = texture
