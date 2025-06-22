@@ -174,9 +174,17 @@ func _on_file_dialog_file_selected(path: String) -> void:
 		var file_name = dir.get_next()
 		while file_name != "":
 			if not dir.current_is_dir():
-				# Check for image file extensions
-				if file_name.ends_with(".png") or file_name.ends_with(".jpg") or file_name.ends_with(".jpeg") or file_name.ends_with(".bvsx"):
-					files.append(file_name)
+				var file = FileAccess.open(dir_path + "/" + file_name, FileAccess.READ)
+				if file:
+					var data = file.get_buffer(file.get_length())
+					file.close()
+					
+					var temp_file
+					var image_type = detect_image_type(data)
+					
+					if image_type == "png" or image_type == "jpg":
+						print(file_name)
+						files.append(file_name)
 			file_name = dir.get_next()
 		dir.list_dir_end()
 
