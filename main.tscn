@@ -37,4 +37,5 @@ pivot_offset = Vector2(589, 322)
 expand_mode = 1
 stretch_mode = 5
 
+[connection signal="close_requested" from="FileDialog" to="." method="_on_file_dialog_close_requested"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

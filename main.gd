@@ -6,6 +6,8 @@ var dir_path = ""
 var currfile = ""
 var files = []
 
+var controlsEnabled = false
+
 var drag_offset = Vector2(0, 0)
 var dragging = false
 
@@ -24,8 +26,9 @@ var new_scale = Vector2(1, 1)
 func _process(delta):
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		$FileDialog.visible = true
+		controlsEnabled = false
 
-	if Input.is_action_just_pressed("left_click"):
+	if Input.is_action_just_pressed("left_click") and controlsEnabled:
 		dragging = true
 		drag_offset = get_global_mouse_position() - texture_rect.global_position
 
@@ -38,13 +41,13 @@ func _process(delta):
 	var mouse_local_pos = texture_rect.get_local_mouse_position() 
 	
 
-	if Input.is_action_just_pressed("scroll_up"):
+	if Input.is_action_just_pressed("scroll_up") and controlsEnabled:
 		texture_rect.pivot_offset = mouse_local_pos
 		new_scale = texture_rect.scale * scale_strength
 		var mouse_global = get_global_mouse_position()
 		texture_rect.global_position = mouse_global - (mouse_local_pos * texture_rect.scale)
 
-	if Input.is_action_just_pressed("scroll_down"):
+	if Input.is_action_just_pressed("scroll_down") and controlsEnabled:
 		texture_rect.pivot_offset = mouse_local_pos
 		new_scale = texture_rect.scale / scale_strength
 		var mouse_global = get_global_mouse_position()
@@ -52,13 +55,13 @@ func _process(delta):
 	
 	texture_rect.scale = texture_rect.scale.lerp(new_scale, 0.2)
 	
-	if Input.is_action_just_pressed("reset"):
+	if Input.is_action_just_pressed("reset") and controlsEnabled:
 		dragging = false
 		new_scale = Vector2(1, 1)
 		texture_rect.scale = Vector2(1, 1)
 		texture_rect.position = Vector2(0, 0)
 		
-	if Input.is_action_just_pressed("ui_left"):
+	if Input.is_action_just_pressed("ui_left") and controlsEnabled:
 		var file_count = files.size()
 		var index = files.find(currfile)
 		if index - 1 == -1:
@@ -66,7 +69,7 @@ func _process(delta):
 		else:
 			_on_file_dialog_file_selected(dir_path + "/" + files[index - 1])
 		
-	if Input.is_action_just_pressed("ui_right"):
+	if Input.is_action_just_pressed("ui_right") and controlsEnabled:
 		var file_count = files.size()
 		var index = files.find(currfile)
 		if index + 1 == file_count:
@@ -92,6 +95,7 @@ func detect_image_type(buffer: PackedByteArray) -> String:
 
 func _on_file_dialog_file_selected(path: String) -> void:
 	dragging = false
+	controlsEnabled = true
 	new_scale = Vector2(1, 1)
 	texture_rect.scale = Vector2(1, 1)
 	texture_rect.position = Vector2(0, 0)
@@ -184,9 +188,13 @@ func _on_file_dialog_file_selected(path: String) -> void:
 						files.append(file_name)
 			file_name = dir.get_next()
 		dir.list_dir_end()
-
+	
 		#print("Image files in directory:")
 		#for f in files:
 		#	print(f)
 	else:
 		print("Failed to open directory: ", dir_path)
+
+
+func _on_file_dialog_close_requested():
+	controlsEnabled = true
