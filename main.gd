@@ -18,6 +18,8 @@ func _ready():
 	if dir_path != "":
 	#	print("Loaded last directory: ", dir_path)
 		$FileDialog.current_dir = dir_path
+	
+	$TextureRect.texture_filter = config.get_value("general", "texture_filter", 2)
 
 var scale_strength = 1.2
 var smoothing_speed = 5
@@ -76,6 +78,23 @@ func _process(delta):
 			_on_file_dialog_file_selected(dir_path + "/" + files[0])
 		else:
 			_on_file_dialog_file_selected(dir_path + "/" + files[index + 1])
+	
+	if Input.is_action_just_pressed("render_mode"):
+		if $TextureRect.texture_filter == 1:
+			$TextureRect.texture_filter = 2
+			var config = ConfigFile.new()
+			config.load("user://settings.cfg")
+			
+			config.set_value("general", "texture_filter", 2)
+			config.save("user://settings.cfg")
+		else:
+			$TextureRect.texture_filter = 1
+			var config = ConfigFile.new()
+			config.load("user://settings.cfg")
+			
+			config.set_value("general", "texture_filter", 1)
+			config.save("user://settings.cfg")
+
 
 
 
