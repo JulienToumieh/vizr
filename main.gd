@@ -217,3 +217,11 @@ func _on_file_dialog_file_selected(path: String) -> void:
 
 func _on_file_dialog_close_requested():
 	controlsEnabled = true
+
+
+func _on_file_dialog_canceled():
+	controlsEnabled = true
+
+
+func _on_file_dialog_confirmed():
+	controlsEnabled = true
