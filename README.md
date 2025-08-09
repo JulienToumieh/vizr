@@ -9,6 +9,7 @@ Vizr is a super minimalist image viewer made with Godot 4, it automatically dete
 - Prev/next to view the images in the same directory *(arrow keys)*
 - Remember the last directory loaded in the file selector
 - Detect image files automatically even with custom extension names
+- Toggle render mode for sharp pixelated images *(F2)*
 
 ## Screenshots
 ### File/Directory Selector
